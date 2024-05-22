@@ -1,0 +1,6 @@
+[submodule "front"]
+	path = front
+	url = https://github.com/CedricTheveneau/Voyage_Stoique-Front
+[submodule "back"]
+	path = back
+	url = https://github.com/CedricTheveneau/Voyage_Stoique-Back
