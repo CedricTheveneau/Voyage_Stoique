@@ -1,0 +1,31 @@
+services:
+  node-mongoose:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    container_name: node-mongoose
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://localhost:8080/api/health/check || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - 8080:8080
+  react-app:
+    build:
+      context: ./front/
+      dockerfile: Dockerfile
+    container_name: react-app
+    ports:
+      - 3000:3000
+    depends_on:
+      node-mongoose:
+        condition: service_healthy
+    extra_hosts:
+      - "local.voyage-stoique=127.0.0.1"
+volumes:
+  db_data:
