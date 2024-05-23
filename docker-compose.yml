@@ -4,6 +4,13 @@ services:
       context: ./back
       dockerfile: Dockerfile
     container_name: node-mongoose
+    develop:
+      watch:
+        - path: ./back/
+          target: /app/
+          action: sync
+        - path: ./back/package.json
+          action: rebuild
     healthcheck:
       test:
         [
@@ -20,6 +27,13 @@ services:
       context: ./front/
       dockerfile: Dockerfile
     container_name: react-app
+    develop:
+      watch:
+        - path: ./front/
+          target: /src/
+          action: sync
+        - path: ./front/package.json
+          action: rebuild
     ports:
       - 3000:3000
     depends_on:
