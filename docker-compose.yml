@@ -4,6 +4,8 @@ services:
       context: ./back
       dockerfile: Dockerfile
     container_name: node-mongoose
+    environment:
+      - DB_URI=${DB_URI}
     develop:
       watch:
         - path: ./back/
