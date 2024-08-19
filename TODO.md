@@ -1,0 +1,2 @@
+- [ ] Update back repo and update submodules
+- [ ] Review the .env file in front, change its name to .env.local or something related to next compatibiltiy
