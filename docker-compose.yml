@@ -32,7 +32,7 @@ services:
     depends_on:
       auth:
         condition: service_healthy
-      kards:
+      articles:
         condition: service_healthy
     ports:
       - "8080:8080"
@@ -57,27 +57,69 @@ services:
       retries: 5
     depends_on:
       - authDb
-  kards:
+  articles:
     build:
-      context: ./back/Kards
+      context: ./back/Articles
       dockerfile: Dockerfile
-    container_name: kard
+    container_name: article
     develop:
       watch:
-        - path: ./back/Kards/
+        - path: ./back/Articles/
           target: /app/
           action: sync
-        - path: ./back/Kards/package.json
+        - path: ./back/Articles/package.json
           action: rebuild
     env_file:
-      - ./back/Kards/.env
+      - ./back/Articles/.env
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8082/ || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
     depends_on:
-      - kardDb
+      - articleDb
+  comments:
+    build:
+      context: ./back/Comments
+      dockerfile: Dockerfile
+    container_name: comment
+    develop:
+      watch:
+        - path: ./back/Comments/
+          target: /app/
+          action: sync
+        - path: ./back/Comments/package.json
+          action: rebuild
+    env_file:
+      - ./back/Comments/.env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8082/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - commentDb
+  posts:
+    build:
+      context: ./back/Posts
+      dockerfile: Dockerfile
+    container_name: post
+    develop:
+      watch:
+        - path: ./back/Posts/
+          target: /app/
+          action: sync
+        - path: ./back/Posts/package.json
+          action: rebuild
+    env_file:
+      - ./back/Posts/.env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8082/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - postDb
 
   authDb:
     image: mongo:latest
@@ -86,13 +128,31 @@ services:
       - db_data_auth:/data/db
     ports:
       - "27018:27017"
-  kardDb:
+  articleDb:
     image: mongo:latest
-    container_name: kardDb
+    container_name: articleDb
     volumes:
-      - db_data_kard:/data/db
+      - db_data_article:/data/db
     ports:
       - "27019:27017"
+  commentDb:
+    image: mongo:latest
+    container_name: commentDb
+    volumes:
+      - db_data_comment:/data/db
+    ports:
+      - "27020:27017"
+  postDb:
+    image: mongo:latest
+    container_name: postDb
+    volumes:
+      - db_data_post:/data/db
+    ports:
+      - "27021:27017"
+
+
 volumes:
   db_data_auth:
-  db_data_kard:
+  db_data_article:
+  db_data_comment:
+  db_data_post:
