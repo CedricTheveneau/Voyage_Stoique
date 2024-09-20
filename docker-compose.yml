@@ -93,7 +93,7 @@ services:
     env_file:
       - ./back/Comments/.env
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8082/ || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8083/ || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -114,7 +114,7 @@ services:
     env_file:
       - ./back/Posts/.env
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8082/ || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8084/ || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
