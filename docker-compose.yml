@@ -34,6 +34,10 @@ services:
         condition: service_healthy
       articles:
         condition: service_healthy
+      posts:
+        condition: service_healthy
+      comments:
+        condition: service_healthy
     ports:
       - "8080:8080"
   auth:
@@ -62,6 +66,8 @@ services:
       context: ./back/Articles
       dockerfile: Dockerfile
     container_name: article
+    volumes:
+      - ./uploads:/app/uploads
     develop:
       watch:
         - path: ./back/Articles/
@@ -104,6 +110,8 @@ services:
       context: ./back/Posts
       dockerfile: Dockerfile
     container_name: post
+    volumes:
+      - ./uploads:/app/uploads
     develop:
       watch:
         - path: ./back/Posts/
