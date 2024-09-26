@@ -1,0 +1,28 @@
+name: Update Submodules
+
+on:
+  push:
+    paths:
+      - 'front/**'
+      - 'back/**'
+
+jobs:
+  update-submodules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Update submodules
+        run: git submodule update --remote
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+          git add .
+          git commit -m "Auto-update submodule"
+          git push origin main
+        if: success()
