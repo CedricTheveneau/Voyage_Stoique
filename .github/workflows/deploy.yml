@@ -1,0 +1,44 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'front/**'
+      - 'back/**'
+      - '**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Update parent repository and push
+        run: |
+          git config user.name "CedricTheveneau"
+          git config user.email "theveneaucedric@gmail.com"
+          git add .
+          git commit -m "Update submodules" || echo "No changes to commit"
+          git push origin main
+
+      - name: Deploy to DigitalOcean
+        run: |
+          ssh root@209.38.227.24 << 'EOF'
+            set -e
+            cd Voyage_Stoique/
+            git pull origin main
+            docker-compose down
+            docker-compose build
+            docker-compose up -d
+            docker-compose logs
+          EOF
