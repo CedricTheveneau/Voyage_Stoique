@@ -45,8 +45,8 @@ jobs:
             cd Voyage_Stoique/
             git stash || echo "No local changes to stash"
             git pull origin main
-            docker-compose down
-            docker-compose build
-            docker-compose up -d
-            docker-compose logs
+            docker compose down
+            docker compose build
+            docker compose up -d
+            docker compose logs
           EOF
