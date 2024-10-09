@@ -43,7 +43,7 @@ jobs:
           ssh root@209.38.227.24 << 'EOF'
             set -e
             cd Voyage_Stoique/
-            git stash || echo "No local changes to stash"
+            git reset --hard HEAD || echo "No changes to reset"
             git pull origin main
             docker compose down
             docker compose build
